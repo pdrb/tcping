@@ -1,4 +1,4 @@
-# tcping 0.1
+# tcping 0.2
 # author: Pedro Buteri Gonring
 # email: pedro@bigode.net
 # date: 20190924
@@ -7,7 +7,7 @@ import
   nativesockets, net, os, parseopt, sequtils, strformat, strutils, times
 
 
-const tcpingVer = "0.1"
+const tcpingVer = "0.2"
 
 # Create a custom KeyboardInterrupt Exception for handle ctrl-c
 type
@@ -149,8 +149,10 @@ proc main() =
   let hostIp = getIp(opts.host)
 
   # Vars
-  var latencys = newSeq[float]()
   var latency: float
+  var minLatency: float
+  var maxLatency: float
+  var sumLatency: float = 0
   var rcvd = 0
   var sent = 0
 
@@ -165,9 +167,17 @@ proc main() =
     while true:
       try:
         latency = ping(hostIp, opts.port, opts.timeout)
-        latencys.add(latency)
         inc(rcvd)
         inc(sent)
+        # Initialize min and max latency
+        if rcvd == 1:
+          minLatency = latency
+          maxLatency = latency
+        # Update min and max if needed
+        if latency < minLatency: minLatency = latency
+        if latency > maxLatency: maxLatency = latency
+        # Update the total latency for calculating avg later
+        sumLatency += latency
         echo &"Reply from {hostIP}:{opts.port} time={latency:.2f} ms"
       except TimeoutError:
         inc(sent)
@@ -191,19 +201,15 @@ proc main() =
     echo "Host is probably DOWN or firewalled. Sorry :'(\n"
     quit()
 
-  # Calculate average latency time
-  let sumLatency = foldl(latencys, a + b)
-  let avgLatency = sumLatency / rcvd.float
-
   # Print summary
   echo "\nStatistics:"
   echo "-".repeat(26)
   echo &"\nHost: {opts.host}\n"
   echo &"Sent: {sent} packets\nReceived: {rcvd} packets"
   echo &"Lost: {sent - rcvd} packets ({(sent - rcvd) / sent * 100:.2f}%)\n"
-  echo &"Min latency: {latencys.min:.2f} ms"
-  echo &"Max latency: {latencys.max:.2f} ms"
-  echo &"Average latency: {avgLatency:.2f} ms\n"
+  echo &"Min latency: {minLatency:.2f} ms"
+  echo &"Max latency: {maxLatency:.2f} ms"
+  echo &"Average latency: {sumLatency / rcvd.float:.2f} ms\n"
 
 
 when isMainModule:
