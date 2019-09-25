@@ -1,13 +1,13 @@
-# tcping 0.2
+# tcping 1.0.0
 # author: Pedro Buteri Gonring
 # email: pedro@bigode.net
-# date: 20190924
+# date: 20190925
 
 import
   nativesockets, net, os, parseopt, sequtils, strformat, strutils, times
 
 
-const tcpingVer = "0.2"
+const tcpingVer = "1.0.0"
 
 # Create a custom KeyboardInterrupt Exception for handle ctrl-c
 type
