@@ -33,7 +33,7 @@ Simple example::
 Install
 =======
 
-- Using nimble::
+**Using nimble**::
 
     $ nimble install tcping
 
@@ -43,8 +43,7 @@ To enable it "system wide" just copy the binary to "/usr/local/bin"::
 
     $ cp ~/.nimble/bin/tcping /usr/local/bin
 
-
-- Using nim compiler:
+**Using nim compiler**:
 
 Since only the standard library is used, just download the single source code
 file and compile it::
@@ -52,8 +51,7 @@ file and compile it::
     $ wget https://raw.githubusercontent.com/pdrb/tcping/master/src/tcping.nim
     $ nim c -d:release tcping.nim
 
-
-- Using compiler to create a size optimized binary::
+**Using compiler to create a size optimized binary**::
 
     $ nim c -d:release --opt:size --passL:-s tcping.nim
 
