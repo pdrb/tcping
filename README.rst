@@ -3,7 +3,7 @@ tcping
 
 Ping hosts using tcp packets.
 
-A Python version is also `available <https://github.com/pdrb/synping>`_.
+A Python version is `also available <https://github.com/pdrb/synping>`_.
 
 Simple example::
 
@@ -33,23 +33,31 @@ Simple example::
 Install
 =======
 
-Using nimble::
+- Using nimble::
 
-    $ nimble install
+    $ nimble install tcping
 
-or
+On Linux, a link to the resulting binary will be usually created at: "~/.nimble/bin/tcping".
 
-Using nim compiler::
+To enable it "system wide" just copy the binary to "/usr/local/bin"::
 
+    $ cp ~/.nimble/bin/tcping /usr/local/bin
+
+
+- Using nim compiler:
+
+Since only the standard library is used, just download the single source code
+file and compile it::
+
+    $ wget https://raw.githubusercontent.com/pdrb/tcping/master/src/tcping.nim
     $ nim c -d:release tcping.nim
 
-or
 
-Using compiler to create a size optimized binary::
+- Using compiler to create a size optimized binary::
 
     $ nim c -d:release --opt:size --passL:-s tcping.nim
 
-We can reduce the binary size even more using `upx <https://upx.github.io>`_::
+We can reduce the binary size even more using `UPX <https://upx.github.io>`_::
 
     $ upx --best tcping
 
